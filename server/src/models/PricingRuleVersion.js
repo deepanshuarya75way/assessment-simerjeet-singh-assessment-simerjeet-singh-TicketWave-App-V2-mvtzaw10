@@ -14,4 +14,5 @@ const versionSchema = new Schema({
 versionSchema.index({ruleId: 1,version: 1, },{unique: true});
 
 ['updateOne','UpdateMany','findOneAndUpdate','deleteOne','deleteMany','findOneAndDelete'].forEach(op => versionSchema.pre(op,() =>{throw new Error('PricingRuleVersion is immutable');}));
-module.exports = mongoose.model('PricingRuleVersion', versionSchema);
+
+export default mongoose.model('PricingRuleVersion',versionSchema)

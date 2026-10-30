@@ -48,7 +48,7 @@ const BookingSchema = new mongoose.Schema(
     basePrice: {type: Number},
     lines: [{
       _id: false,
-      ruleId: Schema.Types.ObjectId,
+      ruleId: {type: mongoose.Schema.Types.ObjectId},
       ruleVersion: Number,
       label: String,
       amount: Number,

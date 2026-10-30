@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import PricingRule from "../models/PricingRule.js";
 import PricingRuleVersion from "../models/PricingRuleVersion.js";
 import Event from "../models/Event.js";
-import { ruleSchema } from "../validators/pricingRule";
+import { ruleSchema } from "../validators/pricingRule.js";
 
 const router = express.Router({mergeParams: true});
 async function loadevent(req,res,next){

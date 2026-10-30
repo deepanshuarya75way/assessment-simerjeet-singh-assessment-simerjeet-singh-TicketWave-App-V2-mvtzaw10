@@ -1,6 +1,6 @@
 import PricingRule from "../models/PricingRule.js";
 import Event from "../models/Event.js";
-import { computePrice } from "./pricingEngine";
+import { computePrice } from "./pricingEngine.js";
 
 function buildSeats(event,seats){
   return seats.map(({section,seatNumber})=> {

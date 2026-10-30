@@ -64,23 +64,23 @@ const EventDetail = () => {
     };
   }, [eventId]);
 
-  useEffect(()=>{
-    if(selectedSeats.length === 0){
-      setbreakdown(null);
-      return;
-    }
-    let cancelled = false;
-    setQuoteLoading(true);
-    api
-    .post('/pricing/quote',{
-      eventId,
-      seats: selectedSeats.map(({section,seatNumber}) =>({section,seatNumber})),
+  // useEffect(()=>{
+  //   if(selectedSeats.length === 0){
+  //     setbreakdown(null);
+  //     return;
+  //   }
+  //   let cancelled = false;
+  //   setQuoteLoading(true);
+  //   api
+  //   .post('/pricing/quote',{
+  //     eventId,
+  //     seats: selectedSeats.map(({section,seatNumber}) =>({section,seatNumber})),
 
-    })
-    .then((res) => {if (!cancelled)setbreakdown(res.data);})
-    .catch(() => {if(!cancelled)setbreakdown(res.data);})
-    .finally(()=>)
-  })
+  //   })
+  //   .then((res) => {if (!cancelled)setbreakdown(res.data);})
+  //   .catch(() => {if(!cancelled)setbreakdown(res.data);})
+  //   .finally(()=>)
+  // })
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">

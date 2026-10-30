@@ -6,14 +6,13 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import 'express-async-errors';
-import pricingRules from "./routes/pricingRules.js"
 
 import env, { validateEnv } from './src/config/env.js';
 import connectDB from './src/config/db.js';
 import { initSocket } from './src/services/socket.js';
 import errorHandler from './src/middleware/errorHandler.js';
-import pricingRoutes from "./routes/pricing.js";
-
+import pricingRules from "./src/routes/pricingRules.js";
+import pricingRoutes from "./src/routes/pricing.js";
 import authRoutes from './src/routes/auth.js';
 import eventRoutes from './src/routes/events.js';
 import bookingRoutes from './src/routes/bookings.js';

@@ -1,4 +1,4 @@
-import {z} from zod;
+import {z} from "zod";
 const date = z.coerce.date();
 const range = (schema) =>
   z.object({min: schema.optional(),max: schema.optional()})

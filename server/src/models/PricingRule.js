@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import {z} from "zod";
 const {Schema} = mongoose;
 
 const conditionsSchema = new Schema({
@@ -18,10 +19,10 @@ const effectSchema = new Schema ({
 const pricingRuleSchema = new Schema({
   eventId: {type:Schema.Types.ObjectId, ref: 'Event', required :true},
   name: {type: String,required :true,trim :true},
-  kind: {type: String,enum:['EARLY_BIRD','GROUP','SEAT_TIER','CUSTOM'],default: 'CUSTOM'},
+  kind: z.enum:(['EARLY_BIRD','GROUP','SEAT_TIER','CUSTOM']),default('CUSTOM'),
   priority: {type: Number,default:'100'},
   stackable:{type: Boolean , default:'false'},
-  active: {type: Booleon, default:'true'},
+  active: {type: Boolean, default:'true'},
   conditions: {type: conditionsSchema, default: () =>({})},
   effect: {type: effectSchema, required: 'true'},
   currentVersion: {type: Number ,default: 1},
@@ -31,4 +32,4 @@ const pricingRuleSchema = new Schema({
 
 pricingRuleSchema.index({eventId: 1,active: 1,priority: 1});
 
-module.exports = mongoose.model('PricingRule', pricingRuleSchema);
+export default mongoose.model('PricingRule',pricingRuleSchema)

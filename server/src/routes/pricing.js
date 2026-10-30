@@ -1,5 +1,5 @@
 import express from "express";
-import { getQuote } from "../services/pricingQuote";
+import { getQuote } from "../services/pricingQuote.js";
 
 const router = express.Router();
 
