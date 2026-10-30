@@ -23,6 +23,8 @@ const EventDetail = () => {
   const [viewerCount, setViewerCount] = useState(1);
   const [highlightViewer, setHighlightViewer] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [breakdown, setbreakdown] = useState(null);
+  const [quoteLoading,setQuoteLoading] = useState(false);
 
   // Fetch Event Details
   const { data, isLoading, isError, error } = useQuery({
@@ -62,6 +64,23 @@ const EventDetail = () => {
     };
   }, [eventId]);
 
+  useEffect(()=>{
+    if(selectedSeats.length === 0){
+      setbreakdown(null);
+      return;
+    }
+    let cancelled = false;
+    setQuoteLoading(true);
+    api
+    .post('/pricing/quote',{
+      eventId,
+      seats: selectedSeats.map(({section,seatNumber}) =>({section,seatNumber})),
+
+    })
+    .then((res) => {if (!cancelled)setbreakdown(res.data);})
+    .catch(() => {if(!cancelled)setbreakdown(res.data);})
+    .finally(()=>)
+  })
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">

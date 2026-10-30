@@ -4,13 +4,13 @@ import Notification from '../models/Notification.js';
 import { lockSeat, releaseSeat, getSeatLockOwner } from '../services/redis.js';
 import { generateQRCode } from '../services/qr.js';
 import { emitSeatLocked, emitSeatReleased, emitSeatBooked, emitUserNotification } from '../services/socket.js';
-
+import { getQuote } from '../services/pricingQuote.js';
 // @desc    Initiate Booking & Lock Seats
 // @route   POST /api/bookings
 // @access  User
 export const createBooking = async (req, res) => {
   console.log('[DEBUG] Incoming createBooking request:', req.body);
-  const { eventId, seats, totalAmount } = req.body;
+  const { eventId, seats } = req.body;
   const userId = req.user._id;
 
   if (!eventId || !seats || !Array.isArray(seats) || seats.length === 0) {
@@ -80,6 +80,7 @@ export const createBooking = async (req, res) => {
     }
 
     // 2. Lock the seats in Redis
+
     for (const seat of seats) {
       const { section, seatNumber } = seat;
       console.log(`[DEBUG] Setting Redis lock for seat ${seatNumber}`);
@@ -93,13 +94,15 @@ export const createBooking = async (req, res) => {
       // Emit socket event to event room
       emitSeatLocked(eventId, section, seatNumber, userId);
     }
+    const breakdown = await getQuote(eventId,seats,event);
 
     console.log('[DEBUG] Creating pending booking in MongoDB');
     const booking = await Booking.create({
       user: userId,
       event: eventId,
       seats,
-      totalAmount,
+      priceBreakdown: breakdown,
+      totalAmount : breakdown.total/100,
       status: 'pending'
     });
     console.log('[DEBUG] MongoDB booking creation complete. ID:', booking._id);
@@ -110,6 +113,7 @@ export const createBooking = async (req, res) => {
         bookingId: booking._id,
         seats: booking.seats,
         totalAmount: booking.totalAmount,
+        priceBreakdown: booking.priceBreakdown,
         expiresIn: 600 // 10 minutes in seconds
       },
       message: 'Seats locked. Please confirm booking within 10 minutes.'

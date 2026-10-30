@@ -42,11 +42,25 @@ const BookingSchema = new mongoose.Schema(
     },
     qrCode: {
       type: String
-    }
+    },
+    priceBreakdown: {
+    currency: {type:String,default: 'INR'},
+    basePrice: {type: Number},
+    lines: [{
+      _id: false,
+      ruleId: Schema.Types.ObjectId,
+      ruleVersion: Number,
+      label: String,
+      amount: Number,
+    }],
+    total:{type: Number},
+
+  },
   },
   {
     timestamps: true
-  }
+  },
+  
 );
 
 // Indexes for query performance

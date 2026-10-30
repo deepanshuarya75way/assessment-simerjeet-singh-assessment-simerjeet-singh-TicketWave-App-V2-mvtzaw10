@@ -6,11 +6,13 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import 'express-async-errors';
+import pricingRules from "./routes/pricingRules.js"
 
 import env, { validateEnv } from './src/config/env.js';
 import connectDB from './src/config/db.js';
 import { initSocket } from './src/services/socket.js';
 import errorHandler from './src/middleware/errorHandler.js';
+import pricingRoutes from "./routes/pricing.js";
 
 import authRoutes from './src/routes/auth.js';
 import eventRoutes from './src/routes/events.js';
@@ -44,6 +46,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api/events/:eventId/rules",pricingRules);
 
 // Serve static directory for uploaded event banners
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
@@ -53,6 +56,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
+app.use("/api/pricing",pricingRoutes)
 
 // Health check endpoint
 app.get('/health', (req, res) => {
